@@ -4,8 +4,8 @@
 // @version      2024-02-28
 // @description  try to take over the world!
 // @author       Ilham Novriadi
-// @match        https://e-learning.unpam.ac.id/my/courses.php
-// @icon         https://e-learning.unpam.ac.id/pluginfile.php?file=%2F1%2Ftheme_edumy%2Fheaderlogo2%2F1708916034%2Fcropped-logo-unpam.png
+// @match        https://e-learning.unpam.id/my/courses.php
+// @icon         https://e-learning.unpam.id/pluginfile.php?file=%2F1%2Ftheme_edumy%2Fheaderlogo2%2F1708916034%2Fcropped-logo-unpam.png
 // @grant        none
 // ==/UserScript==
 
@@ -163,6 +163,5 @@
     const observer = new MutationObserver(handleMutations);
 
     // Start observing the document body for changes
-    //https://missav.com/id/actresses/Fumino%20Satsuki
     observer.observe(document.body, { subtree: true, childList: true });
 })();
