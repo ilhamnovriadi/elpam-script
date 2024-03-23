@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Get Link Fordis Unpam
 // @namespace    http://tampermonkey.net/
-// @version      2024-02-28
+// @version      2024-03-24
 // @description  try to take over the world!
 // @author       Ilham Novriadi
 // @match        https://e-learning.unpam.id/my/courses.php
-// @icon         https://e-learning.unpam.id/pluginfile.php?file=%2F1%2Ftheme_edumy%2Fheaderlogo2%2F1708916034%2Fcropped-logo-unpam.png
+// @icon         https://upload.wikimedia.org/wikipedia/id/6/62/UNPAM_logo1.png
 // @grant        none
 // ==/UserScript==
 
@@ -28,18 +28,17 @@
         }
     }
 
-    let targetElement = document.querySelectorAll('.main_content_container');
-    let userElement = Array.from(document.querySelectorAll('.user_set_header')).map(element => {
-        const textElement = element.querySelector('p')
+    let targetElement = document.querySelectorAll('#page-header');
+    let userElement = Array.from(document.querySelectorAll('.logininfo')).map(element => {
+        const textElement = element.querySelector('a')
         const inputText = textElement.textContent
-
-        return extractName(inputText)
+        return inputText
     })
 
     // Function to lazy-loaded elements with buttons
     async function LazyElements() {
         // Find all lazy-loaded elements (replace ".mcc_view" with your actual selector)
-        let links = document.querySelectorAll('.mcc_view');
+        let links = document.querySelectorAll('.dashboard-card');
         let customElement = document.createElement('div');
         customElement.style.backgroundColor = '#f9f9f9';
         customElement.style.border = '1px solid grey';
@@ -56,7 +55,11 @@
 
         var createElement = []
         const URL_MATKUL = []
-        links.forEach(item=> URL_MATKUL.push(item.getAttribute('href')))
+        links.forEach(content=> {
+            const datam = content.querySelector('a').getAttribute('href')
+            // to debug if(datam === "https://e-learning.unpam.id/course/view.php?id=49053")
+            URL_MATKUL.push(datam)
+        })
 
         for(let url_matkul of URL_MATKUL){
             // Example fetch request
@@ -123,17 +126,17 @@
                                 }
                                 return response.text();
                             })
-                            .then(html => {
+                                .then(html => {
                                 const parser = new DOMParser();
                                 const doc = parser.parseFromString(html, 'text/html');
 
-                                const chat = Array.from(doc.querySelectorAll('small>a')).filter(names => {
+                                const chat = Array.from(doc.querySelectorAll('div.d-flex.flex-column > div > a')).filter(names => {
                                     return names.textContent.includes(userElement[0])
                                 })
                                 counter = chat.length
+                                createElement.push(`<li><a style='color: green;' href='${item.href}' target="_blank">${item.name}</a> ${counter > 0 ? "✅ " + counter + "chats" : "" }</li>`)
 
                             })
-                            createElement.push(`<li><a style='color: green;' href='${item.href}' target="_blank">${item.name}</a> ${counter > 0 ? "✅ " + counter + "chats" : "" }</li>`)
                         });
                     })
                 }
